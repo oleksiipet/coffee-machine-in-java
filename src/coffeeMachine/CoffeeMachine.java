@@ -4,6 +4,9 @@ import coffeeMachine.engine.CoffeeEngine;
 import coffeeMachine.engine.Display;
 import coffeeMachine.state.MachineState;
 
+/**
+ * Coffee machine able to handle input and contains engine state.
+ */
 public class CoffeeMachine {
 
   private CoffeeEngine coffeeEngine;
@@ -28,7 +31,7 @@ public class CoffeeMachine {
     return coffeeEngine.isTerminated();
   }
 
-  public void display(String message) {
+  public void showOnDisplay(String message) {
     display.displayMessage(message);
   }
 
@@ -43,10 +46,10 @@ public class CoffeeMachine {
   }
 
   public void displayInvitation() {
-    System.out.print("Write action (buy, fill, take, remaining, exit): ");
+    showOnDisplay("Write action (buy, fill, take, remaining, exit): ");
   }
 
-  public void printState() {
+  public void displayState() {
     System.out.printf("\nThe coffee machine has:\n");
     System.out.printf("%d of water\n", coffeeEngine.getWater());
     System.out.printf("%d of milk\n", coffeeEngine.getMilk());

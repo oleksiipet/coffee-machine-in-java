@@ -9,6 +9,6 @@ class FillMilk implements MachineState {
   public void processRequest(String action, CoffeeMachine context) {
     context.getEngine().setMilk(context.getEngine().getMilk() + Integer.valueOf(action));
     context.setMachineState(new FillBeans());
-    context.display("Write how many grams of coffee beans do you want to add: ");
+    context.showOnDisplay("Write how many grams of coffee beans do you want to add: ");
   }
 }

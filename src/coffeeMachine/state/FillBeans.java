@@ -8,6 +8,6 @@ class FillBeans implements MachineState {
   public void processRequest(String action, CoffeeMachine context) {
     context.getEngine().setCoffee(context.getEngine().getCoffee() + Integer.valueOf(action));
     context.setMachineState(new FillCups());
-    System.out.printf("Write how many disposable cups of coffee do you want to add: ");
+    context.showOnDisplay("Write how many disposable cups of coffee do you want to add: ");
   }
 }

@@ -1,7 +1,5 @@
 package coffeeMachine.engine;
 
-import coffeeMachine.engine.Display;
-
 public class StdIoDisplay implements Display {
 
   @Override
