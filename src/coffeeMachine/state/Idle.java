@@ -15,12 +15,11 @@ public class Idle implements MachineState {
   public void processRequest(String action, CoffeeMachine context) {
     switch (action) {
       case BUY:
-        context
-            .showOnDisplay("\nWhat do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino: ");
+        context.triggerBuyProcess();
         context.setMachineState(new ServeBeverage(StandartBeverages.Factory));
         break;
       case FILL:
-        context.showOnDisplay("Write how many ml of water do you want to add: ");
+        context.triggerFillProcess();
         context.setMachineState(new FillWater());
         break;
       case TAKE:

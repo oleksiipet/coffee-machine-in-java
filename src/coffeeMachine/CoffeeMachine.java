@@ -1,6 +1,7 @@
 package coffeeMachine;
 
 import coffeeMachine.engine.CoffeeEngine;
+import coffeeMachine.engine.CoffeeEngineStateFormatter;
 import coffeeMachine.engine.Display;
 import coffeeMachine.state.MachineState;
 
@@ -9,14 +10,21 @@ import coffeeMachine.state.MachineState;
  */
 public class CoffeeMachine {
 
-  private CoffeeEngine coffeeEngine;
-  private MachineState machineState;
-  private Display display;
+  private static final String INVITATION_STRING = "Write action (buy, fill, take, remaining, exit): ";
+  private static final String BUY_INVITATION = "\nWhat do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino: ";
 
-  CoffeeMachine(CoffeeEngine coffeeEngine, Display display) {
+  private final CoffeeEngine coffeeEngine;
+  private final CoffeeEngineStateFormatter stateFormatter;
+  private final Display display;
+
+  private MachineState machineState;
+  private boolean terminated;
+
+  public CoffeeMachine(CoffeeEngine coffeeEngine, Display display) {
     this.coffeeEngine = coffeeEngine;
     this.display = display;
     this.machineState = MachineState.defaultState();
+    this.stateFormatter = new CoffeeEngineStateFormatter(coffeeEngine);
   }
 
   public void process(String input) {
@@ -28,7 +36,7 @@ public class CoffeeMachine {
   }
 
   public boolean isTerminated() {
-    return coffeeEngine.isTerminated();
+    return terminated;
   }
 
   public void showOnDisplay(String message) {
@@ -36,29 +44,31 @@ public class CoffeeMachine {
   }
 
   public void withdrawMoney() {
-    System.out.printf("\nI gave you $%d\n\n", coffeeEngine.getMoney());
+    showOnDisplay(stateFormatter.printWithdraw());
     coffeeEngine.setMoney(0);
   }
 
   public void terminate() {
-    display.shutdown();
-    coffeeEngine.terminate();
+    terminated = true;
   }
 
   public void displayInvitation() {
-    showOnDisplay("Write action (buy, fill, take, remaining, exit): ");
+    showOnDisplay(INVITATION_STRING);
   }
 
   public void displayState() {
-    System.out.printf("\nThe coffee machine has:\n");
-    System.out.printf("%d of water\n", coffeeEngine.getWater());
-    System.out.printf("%d of milk\n", coffeeEngine.getMilk());
-    System.out.printf("%d of coffee beans\n", coffeeEngine.getCoffee());
-    System.out.printf("%d of disposable cups\n", coffeeEngine.getCups());
-    System.out.printf("%d of money\n\n", coffeeEngine.getMoney());
+    showOnDisplay(stateFormatter.printState());
   }
 
   public CoffeeEngine getEngine() {
     return coffeeEngine;
+  }
+
+  public void triggerBuyProcess() {
+    showOnDisplay(BUY_INVITATION);
+  }
+
+  public void triggerFillProcess() {
+    showOnDisplay("Write how many ml of water do you want to add: ");
   }
 }

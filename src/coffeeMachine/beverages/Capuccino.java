@@ -1,39 +1,42 @@
 package coffeeMachine.beverages;
 
 import coffeeMachine.engine.CoffeeEngine;
+import coffeeMachine.engine.CoffeeEngineStateFormatter;
 
 public class Capuccino implements Beverage {
 
-  private CoffeeEngine engine;
+  private static final int WATER_NEEDED = 200;
+  private static final int COFFEE_NEEDED = 12;
+  private static final int MILK_NEEDED = 100;
+  private static final int CUPS_NEEDED = 1;
+  private static final int COST_OF_BEVERAGE = 6;
+
+  private final CoffeeEngineStateFormatter formatter;
+  private final CoffeeEngine engine;
 
   public Capuccino(CoffeeEngine engine) {
     this.engine = engine;
+    this.formatter = new CoffeeEngineStateFormatter(engine);
   }
 
   @Override
-  public void serve() {
-    if (engine.getWater() - 200 >= 0 && engine.getCoffee() - 12 >= 0 && engine.getMilk() - 100 >= 0
-        && engine.getCups() - 1 >= 0) {
-      System.out.printf("I have enough resources, making you a coffee!\n");
-      engine.setWater(engine.getWater() - 200);
-      engine.setMilk(engine.getMilk() - 100);
-      engine.setCoffee(engine.getCoffee() - 12);
-      engine.setCups(engine.getCups() - 1);
-      engine.setMoney(engine.getMoney() + 6);
+  public String serve() {
+    if (isEnoughResources()) {
+      engine.setWater(engine.getWater() - WATER_NEEDED);
+      engine.setMilk(engine.getMilk() - MILK_NEEDED);
+      engine.setCoffee(engine.getCoffee() - COFFEE_NEEDED);
+      engine.setCups(engine.getCups() - CUPS_NEEDED);
+      engine.setMoney(engine.getMoney() + COST_OF_BEVERAGE);
+      return SUCCESS_MESSAGE;
     } else {
-      if (engine.getWater() - 200 < 0) {
-        System.out.printf("Sorry, not enough water!\n");
-      }
-      if (engine.getMilk() - 100 < 0) {
-        System.out.printf("Sorry, not enough milk!\n");
-      }
-      if (engine.getCoffee() - 12 < 0) {
-        System.out.printf("Sorry, not enough coffee beans!\n");
-      }
-      if (engine.getCups() - 1 < 0) {
-        System.out.printf("Sorry, not enough cups!\n");
-      }
+      return formatter
+          .printResoucesNotInRange(WATER_NEEDED, MILK_NEEDED, COFFEE_NEEDED, CUPS_NEEDED);
     }
-    System.out.printf("\n");
+  }
+
+  private boolean isEnoughResources() {
+    return engine.getWater() - WATER_NEEDED >= 0 && engine.getCoffee() - COFFEE_NEEDED >= 0
+        && engine.getMilk() - MILK_NEEDED >= 0
+        && engine.getCups() - CUPS_NEEDED >= 0;
   }
 }

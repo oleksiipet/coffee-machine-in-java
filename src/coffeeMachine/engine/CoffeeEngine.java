@@ -8,7 +8,6 @@ public class CoffeeEngine {
   private int coffee;
   private int cups;
   private int money;
-  private boolean terminated;
 
   public CoffeeEngine(int water, int milk, int coffee, int cups, int money) {
     this.water = water;
@@ -56,13 +55,5 @@ public class CoffeeEngine {
 
   public void setMoney(int money) {
     this.money = money;
-  }
-
-  public boolean isTerminated() {
-    return terminated;
-  }
-
-  public void terminate() {
-    terminated = true;
   }
 }

@@ -15,7 +15,8 @@ public class ServeBeverage implements MachineState {
   @Override
   public void processRequest(String action, CoffeeMachine context) {
     Beverage beverage = beveragesFactory.selectBeverage(action, context.getEngine());
-    beverage.serve();
+    String result = beverage.serve();
+    context.showOnDisplay(result);
     context.setMachineState(new Idle());
     context.displayInvitation();
   }

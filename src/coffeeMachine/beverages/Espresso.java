@@ -1,34 +1,40 @@
 package coffeeMachine.beverages;
 
 import coffeeMachine.engine.CoffeeEngine;
+import coffeeMachine.engine.CoffeeEngineStateFormatter;
 
 public class Espresso implements Beverage {
+
+  private static final int WATER_NEEDED = 250;
+  private static final int COFFEE_NEEDED = 16;
+  private static final int CUPS_NEEDED = 1;
+  private static final int COST_OF_BEVERAGE = 4;
+
+  private final CoffeeEngineStateFormatter formatter;
 
   private CoffeeEngine engine;
 
   public Espresso(CoffeeEngine engine) {
     this.engine = engine;
+    this.formatter = new CoffeeEngineStateFormatter(engine);
   }
 
   @Override
-  public void serve() {
-    if (engine.getWater() - 250 >= 0 && engine.getCoffee() - 16 >= 0 && engine.getCups() - 1 >= 0) {
-      System.out.printf("I have enough resources, making you a coffee!\n");
-      engine.setWater(engine.getWater() - 250);
-      engine.setCoffee(engine.getCoffee() - 16);
-      engine.setCups(engine.getCups() - 1);
-      engine.setMoney(engine.getMoney() + 4);
+  public String serve() {
+    if (isEnoughResources()) {
+      engine.setWater(engine.getWater() - WATER_NEEDED);
+      engine.setCoffee(engine.getCoffee() - COFFEE_NEEDED);
+      engine.setCups(engine.getCups() - CUPS_NEEDED);
+      engine.setMoney(engine.getMoney() + COST_OF_BEVERAGE);
+      return SUCCESS_MESSAGE;
     } else {
-      if (engine.getWater() - 250 < 0) {
-        System.out.printf("Sorry, not enough water!\n");
-      }
-      if (engine.getCoffee() - 16 < 0) {
-        System.out.printf("Sorry, not enough coffee beans!\n");
-      }
-      if (engine.getCups() - 1 < 0) {
-        System.out.printf("Sorry, not enough cups!\n");
-      }
+      return formatter
+          .printResoucesNotInRange(WATER_NEEDED, 0, COFFEE_NEEDED, CUPS_NEEDED);
     }
-    System.out.printf("\n");
+  }
+
+  private boolean isEnoughResources() {
+    return engine.getWater() - WATER_NEEDED >= 0 && engine.getCoffee() - COFFEE_NEEDED >= 0
+        && engine.getCups() - CUPS_NEEDED >= 0;
   }
 }
